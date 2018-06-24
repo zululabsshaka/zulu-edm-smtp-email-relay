@@ -1,8 +1,9 @@
 ## Zulu eDM WordPress Plugin 
 # SMTP Relay & Mailer 
 
-[Offical Plugin Page](https://github.com/zululabsshaka/zulu-edm-smtp-mailer/edit/master/README.md)
+[Offical Plugin Page](https://zululabsshaka.github.io/zulu-edm-smtp-email-relay/)
 
-https://zuluedm.com/trusted-sender/1.0/dist/img/ZulueDMLarge360.png (https://zuluedm.com/pricing-plans/?utm_source=Zulu%20eDM&utm_medium=Gitub%20Page&utm_campaign=SMTP-WP_plugin)
+[Offical Zulu eDM SIte](https://zuluedm.com/pricing-plans/?utm_source=Zulu%20eDM&utm_medium=Gitub%20Page&utm_campaign=SMTP-WP_plugin)
+https://zuluedm.com/trusted-sender/1.0/dist/img/ZulueDMLarge360.png 
 
 
