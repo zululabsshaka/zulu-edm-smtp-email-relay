@@ -29,8 +29,7 @@ Download the [plugin here](https://support.zululabs.com/wordpress/zulu-edm-smtp-
 
 *In your WordPress admin:*
 * Install and activate this plugin.
-* Then add your SMTP gatewayyYou then add your username and password allocated from
-  the Zulu eDM Trusted Sender Team
+* Then add your SMTP gateway username and password allocated by the Zulu eDM Trusted Sender Team
 
 
 1. Visit 'Plugins > Add New'
