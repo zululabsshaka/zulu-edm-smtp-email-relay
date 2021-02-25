@@ -1,12 +1,15 @@
 <?php
 /*
-Plugin Name: Zulu eDM DMARC SMTP Gateway
-Version: 0.0.2
-Plugin URI: http://github.com/zululabs/zulu-edm-trusted-sender-smtp-wp
-Author: Zulu eDM - Shaka
-Author URI: http://github.com/zululabs/
-Description: Configure Your WP Site to use the DMARC enabled Zulu Trusted Sender Gateway to build your reputation
-Text Domain: zulu-edm-zulu-edm-smtp-mailer
+Plugin Name: Zulu eDM WP SMTP Email Plugin
+Version: 1.1.3
+Plugin URI: https://github.com/zululabsshaka/zulu-edm-smtp-email-relay
+Author: zululabs
+Author URI: http://github.com/zululabsshaka/
+Description: Use this SMTP relay plugin to send emails using the Zulu eDM Trusted Sender Network email service. This service is a scalable and robust
+email delivery network that ensures all email traffic meets stringent email protocols.
+
+
+
  */
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -17,7 +20,7 @@ if (!defined('ABSPATH')){
 
 class ZULU_EDM_SMTP_MAILER {
 
-    var $plugin_version = '0.0.2';
+    var $plugin_version = '1.1.3';
     var $phpmailer_version = '6.0.5';
     var $plugin_url;
     var $plugin_path;
@@ -28,12 +31,8 @@ class ZULU_EDM_SMTP_MAILER {
         define('ZULU_EDM_SMTP_MAILER_HOME_URL', home_url());
         define('ZULU_EDM_SMTP_MAILER_URL', $this->plugin_url());
         define('ZULU_EDM_SMTP_MAILER_PATH', $this->plugin_path());
-        $this->plugin_includes();
+        //$this->plugin_includes();
         $this->loader_operations();
-    }
-
-    function plugin_includes() {
-
     }
 
     function loader_operations() {
@@ -76,14 +75,14 @@ class ZULU_EDM_SMTP_MAILER {
     function options_page() {
         $plugin_tabs = array(
             'zulu-edm-smtp-mailer-settings' => __('Zulu SMTP Account', 'zulu-edm-smtp-mailer'),
-            'zulu-edm-smtp-mailer-settings&action=test-email' => __('Check Your Setting', 'zulu-edm-smtp-mailer'),
+            'zulu-edm-smtp-mailer-settings&action=test-email' => __('Email Test', 'zulu-edm-smtp-mailer'),
             'zulu-edm-smtp-mailer-settings&action=server-info' => __('Server Info', 'zulu-edm-smtp-mailer'),
             'zulu-edm-smtp-mailer-settings&action=smtp-tools' => __('Reputation Tools', 'zulu-edm-smtp-mailer'),
-            'zulu-edm-smtp-mailer-settings&action=smtp-credits' => __('Credits', 'zulu-edm-smtp-mailer'),
+            'zulu-edm-smtp-mailer-settings&action=credits' => __('Credits', 'zulu-edm-smtp-mailer'),
         );
-        $url = "http://zuluedm.com/trusted-sender/1.0/";
-        $link_text = sprintf(wp_kses(__('Please visit the <a target="_blank" href="%s">Zulu eDM SMTP Gateway</a> documentation page for usage instructions.', 'zulu-edm-smtp-mailer'), array('a' => array('href' => array(), 'target' => array()))), esc_url($url));
-        echo '<div class="wrap"><h2>Zulu eDM SMTP Gateway v' . ZULU_EDM_SMTP_MAILER_VERSION . '</h2>';
+        $url = "https://support.zululabs.com/index.php?/Knowledgebase/Article/View/wordpress-plugin-zulu-edm-wp-smtp-email-plugin/";
+        $link_text = sprintf(wp_kses(__('Please visit the <a target="_blank" href="%s">Zulu eDM WP SMTP Gateway</a> support page for instructions.', 'zulu-edm-smtp-mailer'), array('a' => array('href' => array(), 'target' => array()))), esc_url($url));
+        echo '<div class="wrap"><h2>Zulu eDM SMTP Gateway v ' . ZULU_EDM_SMTP_MAILER_VERSION . '</h2>';
         echo '<div class="update-nag">'.$link_text.'</div>';
         if (isset($_GET['page'])) {
             $current = $_GET['page'];
@@ -113,9 +112,9 @@ class ZULU_EDM_SMTP_MAILER {
         else if(isset($_GET['action']) && $_GET['action'] == 'smtp-tools'){
             $this->emailTools();
         }
-    //    else if(isset($_GET['action']) && $_GET['action'] == 'smtp-credits'){
-      //      $this->server_info_settings();
-  //      }
+      else if(isset($_GET['action']) && $_GET['action'] == 'credits'){
+       $this->credits();
+       }
         else{
             $this->general_settings();
         }
@@ -147,21 +146,21 @@ class ZULU_EDM_SMTP_MAILER {
                 <tbody>
 
                 <tr valign="top">
-                    <th scope="row"><label for="zulu_edm_smtp_mailer_to_email"><?php _e('To', 'zulu-edm-smtp-mailer');?></label></th>
+                    <th class="" scope="row"><label for="zulu_edm_smtp_mailer_to_email"><?php _e('To', 'zulu-edm-smtp-mailer');?></label></th>
                     <td><input name="zulu_edm_smtp_mailer_to_email" type="text" id="zulu_edm_smtp_mailer_to_email" value="" class="regular-text">
                         <p class="description"><?php _e('Recipient email ', 'zulu-edm-smtp-mailer');?></p></td>
                 </tr>
 
                 <tr valign="top">
                     <th scope="row"><label for="zulu_edm_smtp_mailer_email_subject"><?php _e('Subject', 'zulu-edm-smtp-mailer');?></label></th>
-                    <td><input name="zulu_edm_smtp_mailer_email_subject" type="hidden" id="zulu_edm_smtp_mailer_email_subject" value="Test:Zulu rDM SMTP" class="regular-text">
-                        <p class="description"><?php _e('Test:Zulu rDM SMTP', 'zulu-edm-smtp-mailer');?></p></td>
+                    <td><input name="zulu_edm_smtp_mailer_email_subject" type="hidden" id="zulu_edm_smtp_mailer_email_subject" value="Test: Zulu eDM SMTP" class="regular-text">
+                        <p class="description"><?php _e('Test: Zulu eDM SMTP', 'zulu-edm-smtp-mailer');?></p></td>
                 </tr>
 
                 <tr valign="top">
                     <th scope="row"><label for="zulu_edm_smtp_mailer_email_body"><?php _e('Message', 'zulu-edm-smtp-mailer');?></label></th>
-                    <td><input type="hidden" name="zulu_edm_smtp_mailer_email_body" id="zulu_edm_smtp_mailer_email_body" value="This Test was sent from your WordPress Site.... Shaka">
-                        <p class="description"><?php _e('This Test was sent from your WordPress Site.... Shaka', 'zulu-edm-smtp-mailer');?></p></td>
+                    <td><input type="hidden" name="zulu_edm_smtp_mailer_email_body" id="zulu_edm_smtp_mailer_email_body" value="This Test email was sent from your WordPress Site.... Shaka">
+                        <p class="description"><?php _e('This Test email was sent from your WordPress Site.... Shaka', 'zulu-edm-smtp-mailer');?></p></td>
                 </tr>
 
                 </tbody>
@@ -213,11 +212,33 @@ class ZULU_EDM_SMTP_MAILER {
 
     function emailTools()
     {
-        $email_tools = 'Use these';
-        ?>
-        <textarea rows="10" cols="50" class="large-text code"><?php echo $email_tools;?></textarea>
-        <?php
+        $email_tools = '<div class="large-text code"><h3>Email Reputation Tools</h3><p>Free tools to configure email domains for reputation management and cyber email security.</p>';
+        $email_tools = $email_tools . '<ul><li><a href="http://trustedsenderscore.com" target="_blank">Domain Trust Score</a></li>';
+        $email_tools = $email_tools . '<li><a href="https://zuluedm.com/trusted-sender/1.0/" target="_blank">Email DNS Check</a></li>';
+        $email_tools = $email_tools . '<li><a href="https://zuluedm.com/free/dkim-wizard/doman-key-generator" target="_blank">DKIM Wizard</a></li>';
+        $email_tools = $email_tools . '<li><a href="https://zuluedm.com/trusted-sender/1.0/free-email-developer-tools.php" target="_blank">Encoding Tools</a></li>';
+        $email_tools = $email_tools . '<li><a href="https://zuluedm.com/meaningful-google-analytics/edm-utm-link-tracking.php" target="_blank">Link Tracking Builder</a></li>';
+        $email_tools = $email_tools . '<li><a href="https://zuluedm.com/meaningful-google-analytics/" target="_blank">Imporve Website &amp; Email Conversion Reports with our Google Analytics Enhancement</a></li>';
+        $email_tools = $email_tools . '<li><a href="https://zuluedm.com/trusted-sender/1.0/free-ssl-check.php" target="_blank">SSL Check</a></li></ul></div>';
+        echo $email_tools;
+       }
+
+    function credits()
+    {
+
+        $credits = '<div class="large-text code"><h3>Legal Notices</h3><p>This plugin is governed by the Zulu eDM Legal Notices listed below. Also listed are third party source code credits used';
+        $credits = $credits . 'to produce this free plugin. Each piece of open source used is covered by their own agreements.</p>';
+        $credits = $credits . '<ul><li><a href="https://zuluedm.com/legal-notices" target="_blank">Legal Notices</a></li>';
+        $credits = $credits . '<li><a href="https://zuluedm.com/ip-addresses-sms-numbers/" target="_blank">IP Addresses</a></li>';
+        $credits = $credits . '<li><a href="https://blacklists.zuluedm.com/" target="_blank">Our IP Addresses Health</a></li>';
+        $credits = $credits . '<li><a href="https://support.zululabs.com" target="_blank">Zulu Support</a></li>';
+        $credits = $credits . '<li><a href="https://github.com/PHPMailer/PHPMailer" target="_blank">Credit: PHPMailer</a></li>';
+        $credits = $credits . '<li><a href="https://github.com/nategood/httpful" target="_blank">Credit: HTTPful</a></li></ul></div>';
+        echo $credits;
+
     }
+
+
 
     function general_settings() {
 
@@ -288,7 +309,7 @@ class ZULU_EDM_SMTP_MAILER {
             $options['smtp_auth'] = 'true';
             $options['smtp_username'] = '';
             $options['smtp_password'] = '';
-            $options['type_of_encryption'] = '';
+            $options['type_of_encryption'] = 'PLAIN';
             $options['smtp_port'] = '25';
             $options['from_email'] = '';
             $options['from_name'] = '';
@@ -315,14 +336,14 @@ class ZULU_EDM_SMTP_MAILER {
 
                 <tr valign="top">
                     <th scope="row"><label for="smtp_host"><?php _e('SMTP Host', 'zulu-edm-smtp-mailer');?></label></th>
-                    <td><input name="smtp_host" id="smtp_host" value="<?php echo $options['smtp_host']; ?>" class="regular-text code">
-                        <p class="description"><?php _e('The SMTP server which will be used to send email. For example: smtp.gmail.com', 'zulu-edm-smtp-mailer');?></p></td>
+                    <td><input name="smtp_host" id="smtp_host" value="<?php echo $options['smtp_host']; ?>" class="regular-text" disabled>
+                        <p class="description"><?php _e('The SMTP server which will be used to send email.', 'zulu-edm-smtp-mailer');?></p></td>
                 </tr>
 
                 <tr>
                     <th scope="row"><label for="smtp_auth"><?php _e('Zulu eDM Trusted Sender Authentication', 'zulu-edm-smtp-mailer');?></label></th>
                     <td>
-                        <input name="smtp_auth" id="smtp_auth" value="true" class="regular-text code">
+                        <input name="smtp_auth" id="smtp_auth" value="true" class="regular-text code" disabled>
                         <p class="description"><?php _e('<a target="_blank" href="https://zuluedm.com/trusted-sender/1.0/zuluedmsettings.php?utm_source=Zulu%20eDM&utm_medium=WPPlugin&utm_campaign=Trusted%20Sender">Visit Zulu eDM Trusted Sender</a> 
                         To Register.', 'zulu-edm-smtp-mailer');?></p>
                     </td>
@@ -342,14 +363,14 @@ class ZULU_EDM_SMTP_MAILER {
 
                 <tr valign="top">
                     <th scope="row"><label for="smtp_port"><?php _e('SMTP Port', 'zulu-edm-smtp-mailer');?></label></th>
-                    <td><input name="smtp_port" id="smtp_port" value="25" class="regular-text code">
-                        <p class="description"><?php _e('The port which will be used when sending an email (587/465/25). If you choose TLS it should be set to 587. For SSL use port 465 instead.', 'zulu-edm-smtp-mailer');?></p></td>
+                    <td><input name="smtp_port" id="smtp_port" value="25" class="regular-text code" disabled>
+                        <p class="description"><?php _e('The port which will be used when sending an email (587/465/25).', 'zulu-edm-smtp-mailer');?></p></td>
                 </tr>
 
                 <tr valign="top">
                     <th scope="row"><label for="from_email"><?php _e('From Email Address', 'zulu-edm-smtp-mailer');?></label></th>
                     <td><input name="from_email" type="text" id="from_email" value="<?php echo $options['from_email']; ?>" class="regular-text code">
-                        <p class="description"><?php _e('The email address which will be used as the From Address if it is not supplied to the mail function.', 'zulu-edm-smtp-mailer');?></p></td>
+                        <p class="description"><?php _e('An email address that is using the domain that is approved with Zulu eDM and your DMARC record.', 'zulu-edm-smtp-mailer');?></p></td>
                 </tr>
 
                 <tr valign="top">
@@ -360,8 +381,8 @@ class ZULU_EDM_SMTP_MAILER {
 
                 <tr valign="top">
                     <th scope="row"><label for="disable_ssl_verification"><?php _e('Disable SSL Certificate Verification', 'zulu-edm-smtp-mailer');?></label></th>
-                    <td><input name="disable_ssl_verification" id="disable_ssl_verification" value="true">
-                        <p class="description"><?php _e('As of PHP 5.6 you will get a warning/error if the SSL certificate on the server is not properly configured. You can check this option to disable that default behaviour. Please note that PHP 5.6 made this change for a good reason. So you should get your host to fix the SSL configurations instead of bypassing it', 'zulu-edm-smtp-mailer');?></p></td>
+                    <td><input name="disable_ssl_verification" id="disable_ssl_verification" value="true" disabled>
+                        <p class="description"><?php _e('If your webserver has TLS support we will automatically encrypt the email', 'zulu-edm-smtp-mailer');?></p></td>
                 </tr>
 
                 </tbody>
@@ -582,12 +603,7 @@ if(!function_exists('wp_mail') && is_zulu_edm_smtp_mailer_configured()){
         if ( !isset( $from_name ) ){
             $from_name = $options['from_name'];//'WordPress';
         }
-        /* If we don't have an email from the input headers default to wordpress@$sitename
-         * Some hosts will block outgoing mail from this address if it doesn't exist but
-         * there's no easy alternative. Defaulting to admin_email might appear to be another
-         * option but some hosts may refuse to relay mail from an unknown domain. See
-         * https://core.trac.wordpress.org/ticket/5007.
-         */
+
 
         if ( !isset( $from_email ) ) {
             // Get the site domain and get rid of www.
